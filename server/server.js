@@ -11,34 +11,8 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 4000;
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000/";
 
-const typeDefs = `
-  type User {
-    id: Int
-    name: String
-    email: String
-  }
-
-  type Query {
-    hello: String
-    getUsers: [User]
-  }
-
-  type Mutation {
-    createUser(name: String!, email: String!): User
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hello, Apollo Server!",
-    getUsers: async () => await prisma.user.findMany(),
-  },
-  Mutation: {
-    createUser: async (_, { name, email }) => {
-      return await prisma.user.create({ data: { name, email } });
-    },
-  },
-};
+const typeDefs = require('./gql/schema')
+const resolvers = require("./gql/resolver")
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
