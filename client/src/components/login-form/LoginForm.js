@@ -4,6 +4,19 @@ import React, { useState } from "react";
 import styles from "./LoginForm.module.css";
 import { usePathname, useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { gql, useMutation } from "@apollo/client";
+import client from "@/lib/gql/apolloClient";
+
+const LOGIN_MUTATION = gql`
+  mutation LoginUser($email: String!, $password: String!) {
+    loginUser(email: $email, password: $password) {
+      email
+      name
+      id
+      token
+    }
+  }
+`;
 
 const LoginForm = () => {
   const [error, setError] = useState();
@@ -16,8 +29,21 @@ const LoginForm = () => {
     formState: { isValid },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const [loginUser, { loading }] = useMutation(LOGIN_MUTATION, { client });
+
+  const onSubmit = async (data) => {
+    try {
+      const { email, password } = data;
+      const { data } = await loginUser({
+        variables: { email, password },
+      });
+
+      if (data) {
+        localStorage.setItem("token", data.loginUser.token);
+      }
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleSignUp = () => {

@@ -40,3 +40,34 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ```
 npm install @apollo/client graphql
 ```
+
+### Code added from ChatGPT in SignupForm component
+
+```import { gql, useMutation } from "@apollo/client";
+import client from "@/lib/gql/apolloClient";
+
+const SIGNUP_MUTATION = gql`
+  mutation SignupUser($name: String!, $email: String!, $password: String!) {
+    createUser(name: $name, email: $email, password: $password) {
+      id
+      email
+      name
+    }
+  }
+`;
+
+...
+
+const [signupUser, { loading }] = useMutation(SIGNUP_MUTATION, { client });
+
+const onSubmit = async (data) => {
+    try {
+      const {name, email, password } = data;
+      const response = await signupUser({
+        variables: { name, email, password },
+      });
+    } catch (err) {
+      setError(err.message);
+    }
+};
+```
