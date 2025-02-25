@@ -1,37 +1,30 @@
-# Workflow
+## Database Schema Design
 
-### Create server
+### User Model
+The User model represents users in the system, storing essential information and their relationships with products.
 
-```
-cd server
-npm init -y
-npm i express dotenv nodemon
-```
+**Fields:**
+* ```id``` (Int, Primary Key) - Unique identifier for each user.
+* ```createdAt``` (DateTime) - Timestamp when the user account was created.
+* ```email``` (String, Unique) - Email address of the user.
+* ```name``` (String) - Name of the user.
+* ```password``` (String) - Hashed password for authentication.
+* ```owned``` (Array of Product IDs) - List of products owned by the user.
+* ```borrowed``` (Array of Product IDs) - List of products borrowed by the user.
 
-### Configure Postgres with express server
+### Product Model
+The Product model represents items that users can buy, sell, rent, or borrow.
 
-```
-npm i pg
-```
-
-
-### Integrate Prisma ORM
-
-Step 1:
-```
-npm i prisma --save-dev
-npx prisma init
-```
-
-Step 2:
-* Set DATABASE_URL in environment
-* Create models in schema.prisma file
-* Run ``` npx prisma migrate dev --name init ```
-* https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/introduction
-* https://dev.to/ajor-saha/setting-up-a-backend-with-prisma-express-and-postgresql-482e?form=MG0AV3
-
-### Integrate GraphQL server
-
-```
-npm install express graphql-http graphql --save
-```
+**Fields:**
+- **`id`** (UUID, Primary Key) - Unique identifier for each product.
+- **`title`** (String, Required) - Name of the product.
+- **`description`** (String, Required) - Detailed description of the product.
+- **`status`** (String, Required) - Current status of the product (e.g., `available`, `sold`, `rented`).
+- **`owner`** (UUID, Required) - Reference to the user who owns the product.
+- **`sellingPrice`** (Float, Required) - Price of the product for selling.
+- **`rentPrice`** (Float, Required) - Price of the product for renting.
+- **`rentRule`** (String, Required) - Conditions for renting the product.
+- **`boughtBy`** (UUID, Nullable) - User ID of the person who bought the product (if applicable).
+- **`borrowedBy`** (UUID, Nullable) - User ID of the person who borrowed the product (if applicable).
+- **`sellingDate`** (DateTime, Nullable) - Date when the product was bought.
+- **`rentDate`** (DateTime, Nullable) - Date when the product was borrowed.

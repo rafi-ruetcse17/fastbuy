@@ -13,4 +13,26 @@ model User {
   email     String   @unique
   name      String
   password  String
+  owned     Int[]    @default([])
+  borrowed  Int[]    @default([])
+}
+
+
+model Product {
+  id           String   @id @default(uuid()) 
+  title        String   @db.VarChar(255)
+  description  String   
+  status       String   
+  ownerId      Int     
+  owner        User     @relation(fields: [ownerId], references: [id]) 
+  sellingPrice Float    
+  rentPrice    Float    
+  rentRule     String   
+  boughtById   Int?     
+  boughtBy     User?    @relation(fields: [boughtById], references: [id]) 
+  sellingDate  DateTime? 
+  borrowedById Int?     
+  borrowedBy   User?    @relation(fields: [borrowedById], references: [id]) 
+  rentDate     DateTime? 
+  createdAt    DateTime @default(now())
 }
