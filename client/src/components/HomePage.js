@@ -1,22 +1,28 @@
 "use client";
 
-import { gql, useQuery } from "@apollo/client";
-
-const GET_HELLO = gql`
-  query {
-    hello
-    getUsers {
-      name
-      id
-    }
-  }
-`;
+import { useSession } from "@/hooks/useSession";
+import { Loader } from "./common/loader/Loader";
+import { useRouter } from "next/navigation";
+import { appRouteList } from "@/lib/utils/PageRouteUtils";
+import User from "./user/User";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
-  const { loading, error, data } = useQuery(GET_HELLO);
+  const { loading, session } = useSession();
+  const [pageLoader, setPageLoader] = useState(true);
+  const router = useRouter();
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  useEffect(() => {
+    if (!loading && !session) {
+      router.push(appRouteList.login);
+    }
 
-  return <h1>{data.hello}</h1>;
+    if (!loading && session) {
+      setPageLoader(false);
+    }
+  }, [loading, session]);
+
+  if (loading || pageLoader) return <Loader />;
+
+  return <User />;
 }

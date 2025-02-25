@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./LoginForm.module.css";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import client from "@/lib/gql/apolloClient";
+import { appRouteList } from "@/lib/utils/PageRouteUtils";
+import { useSession } from "@/hooks/useSession";
+import { Loader } from "../common/loader/Loader";
 
 const LOGIN_MUTATION = gql`
   mutation LoginUser($email: String!, $password: String!) {
@@ -20,8 +23,9 @@ const LOGIN_MUTATION = gql`
 
 const LoginForm = () => {
   const [error, setError] = useState();
+  const [pageLoader, setPageLoader] = useState(true);
+  const { session, loading: sessionLoading } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
 
   const {
     register,
@@ -31,15 +35,22 @@ const LoginForm = () => {
 
   const [loginUser, { loading }] = useMutation(LOGIN_MUTATION, { client });
 
+  useEffect(() => {
+    if (session) {
+      router.replace(appRouteList.user);
+    }
+    if (!sessionLoading && !session) setPageLoader(false);
+  }, [session, sessionLoading]);
+
   const onSubmit = async (data) => {
+    const { email, password } = data;
     try {
-      const { email, password } = data;
       const { data } = await loginUser({
         variables: { email, password },
       });
-
       if (data) {
         localStorage.setItem("token", data.loginUser.token);
+        router.push(appRouteList.user);
       }
     } catch (err) {
       setError(err.message);
@@ -47,8 +58,10 @@ const LoginForm = () => {
   };
 
   const handleSignUp = () => {
-    router.push(`${pathname}?authState=signup`);
+    router.push(appRouteList.signup);
   };
+
+  if (pageLoader) return <Loader />;
 
   return (
     <div className={styles["modal"]}>
@@ -77,6 +90,7 @@ const LoginForm = () => {
             className={styles[!isValid && "disabled"]}
           >
             Log in
+            {loading && <span className={styles["loading"]}></span>}
           </button>
           <div className={styles["or"]}>or</div>
         </form>

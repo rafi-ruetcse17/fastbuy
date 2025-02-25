@@ -26,7 +26,7 @@ const resolvers = {
       if (!valid) throw new Error("Invalid credentials");
 
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-        expiresIn: "1h",
+        expiresIn: "3d",
       });
 
       return { ...user, token };

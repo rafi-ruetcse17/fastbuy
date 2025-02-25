@@ -1,0 +1,16 @@
+.nav {
+  display: flex;
+  flex-direction: row-reverse;
+  padding: 20px;
+}
+
+.logout-button {
+  color: #ffffff;
+  padding: 10px;
+  background-color: #bf2e2e !important;
+  font-weight: 600 !important;
+  width: 100px;
+  border: none !important;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./SignupForm.module.css";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { gql, useMutation } from "@apollo/client";
 import client from "@/lib/gql/apolloClient";
+import { appRouteList } from "@/lib/utils/PageRouteUtils";
+import { useSession } from "@/hooks/useSession";
+import { Loader } from "../common/loader/Loader";
 
 const SIGNUP_MUTATION = gql`
   mutation SignupUser($name: String!, $email: String!, $password: String!) {
@@ -19,8 +22,9 @@ const SIGNUP_MUTATION = gql`
 
 const SignupForm = () => {
   const [error, setError] = useState();
+  const [pageLoader, setPageLoader] = useState(true);
+  const { session, loading: sessionLoading } = useSession();
   const router = useRouter();
-  const pathname = usePathname();
 
   const {
     register,
@@ -30,22 +34,30 @@ const SignupForm = () => {
 
   const [signupUser, { loading }] = useMutation(SIGNUP_MUTATION, { client });
 
+  useEffect(() => {
+    if (session) {
+      router.replace(appRouteList.user);
+    }
+    if (!sessionLoading && !session) setPageLoader(false);
+  }, [session, sessionLoading]);
+
   const onSubmit = async (data) => {
     try {
-      const {name, email, password } = data;
-      const response = await signupUser({
+      const { name, email, password } = data;
+      await signupUser({
         variables: { name, email, password },
       });
-      console.log("Signup successful:", response.data);
-      router.push(`${pathname}?authState=login`);
+      router.push(appRouteList.login);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  const handleSignUp = () => {
-    router.push(`${pathname}?authState=login`);
+  const handleLogin = () => {
+    router.push(appRouteList.login);
   };
+
+  if (pageLoader) return <Loader />;
 
   return (
     <div className={styles["modal"]}>
@@ -82,12 +94,13 @@ const SignupForm = () => {
             className={styles[!isValid && "disabled"]}
           >
             Create account
+            {loading && <span className={styles["loading"]}></span>}
           </button>
           <div className={styles["or"]}>or</div>
         </form>
         <div className={styles["bottom"]}>
           <div className={styles["line"]}></div>
-          <button className={styles["button"]} onClick={handleSignUp}>
+          <button className={styles["button"]} onClick={handleLogin}>
             Log in
           </button>
         </div>

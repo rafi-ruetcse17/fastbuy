@@ -9,24 +9,30 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const SERVER_URL = process.env.SERVER_URL || "http://localhost:4000/";
 
-const typeDefs = require('./gql/schema')
+const typeDefs = require("./gql/schema");
 const resolvers = require("./gql/resolver");
 const { getUserFromToken } = require("./middlewares/userToken");
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
-    const token = req.headers.authorization || "";
-    const user = await getUserFromToken(token.replace("Bearer ", ""));
-    return { user };
-  },
 });
 
 async function startServer() {
   await server.start();
 
-  app.use("/graphql", cors(), bodyParser.json(), expressMiddleware(server));
+  app.use(
+    "/graphql",
+    cors(),
+    express.json(),
+    expressMiddleware(server, {
+      context: async ({ req }) => {
+        const token = req.headers.authorization || "";
+        const user = await getUserFromToken(token.replace("Bearer ", ""));
+        return { user };
+      },
+    })
+  );
 
   app.listen(PORT, (err) => {
     if (err) throw err;
