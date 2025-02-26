@@ -1,14 +1,38 @@
 version: '3.8'
 
 services:
+  postgres_db:
+    image: postgres:15
+    hostname: postgres_db
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: demodb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - '5432:5432'
+    networks:
+      - prisma-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d demodb"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+
   server:
     build: ./server
     ports:
       - "4000:4000"
     volumes:
       - ./server:/app
+    environment:
+      DATABASE_URL: "postgresql://postgres:postgres@postgres_db:5432/demodb?schema=public"
     depends_on:
-      - client
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - prisma-network
 
   client:
     build: ./client
@@ -16,3 +40,9 @@ services:
       - "3000:3000"
     volumes:
       - ./client:/app
+    networks:
+      - prisma-network
+
+networks:
+  prisma-network:
+    name: prisma-network

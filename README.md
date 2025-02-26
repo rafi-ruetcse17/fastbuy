@@ -45,12 +45,19 @@ FastBuy is a web application where users can sign up and log in with their email
 
 ### **Steps to Run the Project Using Docker**
 
-1. **Navigate to the Project Directory**  
+1. **Create a ```.env``` file inside the ```server ```  directory and set two varibales**
+   ```bash
+   DATABASE_URL=postgresql://postgres:postgres@postgres_db:5432/demodb?schema=public
+   JWT_SECRET=6cc98c44c5298080d11a0cae3
+   ```
+   you can also generate a jwt secret from: https://jwtsecret.com/generate
+
+2. **Open terminal and navigate to the Project Directory**  
    ```bash
    cd fastbuy
    ```
 
-2. **Build and Start the Containers**  
+3. **Build and Start the Containers**  
    ```bash
    docker-compose up --build
    ```
@@ -58,15 +65,22 @@ FastBuy is a web application where users can sign up and log in with their email
      - Build the Docker images for both the **client** and **server**.
      - Start the containers.
 
-3. **Access the Application**
+4. **Access the Application**
    - **Backend (API Server):** `http://localhost:4000`
    - **Frontend (Client App):** `http://localhost:3000`
 
-4. **Stopping the Containers**
+5. **Stopping the Containers**
    To stop the running containers, press `CTRL + C`, or run:
    ```bash
    docker-compose down
    ```
+
+## Troubleshooting
+If you face this prisma related issue (e.g. The table `public.User` does not exist in the current database) during sign up or login, open terminal and go to `server` directory. Then run the command below:
+   ```bash
+   docker-compose exec server npx prisma migrate dev
+   ```
+make sure your docker container is running before you run this command.
 
 ## Contribution
 Contributions are welcome! If you find any issues or want to improve the project, feel free to create a pull request. 🚀
