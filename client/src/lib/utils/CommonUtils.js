@@ -33,3 +33,14 @@ export const rentalPeriods = [
   { value: "daily", label: "daily" },
   { value: "monthly", label: "monthly" },
 ];
+
+export const getDateTimeFromUnixFormat = (timestamp) => {
+  const date = new Date(Number(timestamp));
+  const formattedDate = date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
+  return formattedDate;
+};

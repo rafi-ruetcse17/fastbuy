@@ -9,6 +9,15 @@ const resolvers = {
       if (!user) throw new Error("Not authenticated");
       return user;
     },
+    getUserProducts: async (_, __, { user }) => {
+      if (!user) throw new Error("Not authenticated");
+      const products = await prisma.product.findMany({
+        where: {
+          ownerId: user.id,
+        },
+      });
+      return products;
+    },
   },
   Mutation: {
     createUser: async (_, { name, email, password }) => {

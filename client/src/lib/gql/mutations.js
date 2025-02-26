@@ -30,3 +30,18 @@ export const ADD_PRODUCT = gql`
     }
   }
 `;
+
+export const GET_USER_PRODUCTS = gql`
+  query GetUserProducts {
+    getUserProducts {
+      id
+      title
+      description
+      purchasePrice
+      createdAt
+      rentPrice
+      rentPeriod
+      category
+    }
+  }
+`;

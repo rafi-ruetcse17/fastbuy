@@ -5,7 +5,7 @@ const typeDefs = `
     email: String!
     token: String!
   }
-    type Product {
+  type Product {
     id: String!
     title: String!
     description: String!
@@ -24,6 +24,7 @@ const typeDefs = `
 
   type Query {
     me: User
+    getUserProducts: [Product!]!
   }
 
   type Mutation {
