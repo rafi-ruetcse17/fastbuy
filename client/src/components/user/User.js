@@ -1,15 +1,16 @@
 "use client";
 
 import { useSession } from "@/hooks/useSession";
-import { Button } from "../common/button/Button";
 import styles from "./User.module.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader } from "../common/loader/Loader";
 import { appRouteList } from "@/lib/utils/PageRouteUtils";
+import SingleProductCard from "../single-product-card/SingleProductCard";
+import { Button } from "../common/button/Button";
 
 const User = () => {
-  const { removeSession, loading, session } = useSession();
+  const { loading, session } = useSession();
   const [pageLoader, setPageLoader] = useState(true);
   const router = useRouter();
 
@@ -23,19 +24,17 @@ const User = () => {
     }
   }, [loading, session]);
 
-  const handleLogout = () => {
-    removeSession();
-  };
-
   if (loading || pageLoader) return <Loader />;
 
   return (
     <div>
-      <nav className={styles["nav"]}>
-        <Button className={styles["logout-button"]} onClick={handleLogout}>
-          LOGOUT
-        </Button>
-      </nav>
+      <div className={styles["wrapper"]}>
+        <h3>MY PRODUCTS</h3>
+      </div>
+      <Button onClick={() => router.push(appRouteList.title)}>
+        Add product
+      </Button>
+      <SingleProductCard />
     </div>
   );
 };

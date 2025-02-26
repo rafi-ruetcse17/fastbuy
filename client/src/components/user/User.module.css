@@ -1,16 +1,8 @@
-.nav {
+.wrapper{
   display: flex;
-  flex-direction: row-reverse;
-  padding: 20px;
+  flex-direction: column;
 }
 
-.logout-button {
-  color: #ffffff;
-  padding: 10px;
-  background-color: #bf2e2e !important;
-  font-weight: 600 !important;
-  width: 100px;
-  border: none !important;
-  border-radius: 5px;
-  cursor: pointer;
+.wrapper h3{
+  text-align: center;
 }

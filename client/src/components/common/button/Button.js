@@ -1,4 +1,4 @@
-import { getClassNames } from "@/lib/utils/ObjectUtils";
+import { getClassNames } from "@/lib/utils/CommonUtils";
 import style from "./Button.module.css";
 import { forwardRef } from "react";
 const classNames = getClassNames(style);
