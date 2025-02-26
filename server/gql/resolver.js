@@ -31,6 +31,39 @@ const resolvers = {
 
       return { ...user, token };
     },
+
+    addProduct: async (
+      _,
+      {
+        title,
+        description,
+        status,
+        category,
+        purchasePrice,
+        rentPrice,
+        rentPeriod,
+      },
+      { user }
+    ) => {
+      if (!user) throw new Error("Not authenticated");
+      try {
+        const product = await prisma.product.create({
+          data: {
+            title,
+            description,
+            status,
+            category,
+            purchasePrice,
+            rentPrice,
+            rentPeriod,
+            ownerId: user.id,
+          },
+        });
+        return product;
+      } catch (error) {
+        throw new Error(error.message);
+      }
+    },
   },
 };
 
