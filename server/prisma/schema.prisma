@@ -9,30 +9,32 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
   email     String   @unique
   name      String
   password  String
-  owned     Int[]    @default([])
-  borrowed  Int[]    @default([])
+  owned     Product[]    @relation("UserOwnsProducts")
+  borrowed  Product[]    @relation("UserBorrowsProducts")
+  bought    Product[]    @relation("UserBuysProducts")
+  createdAt DateTime @default(now())
 }
-
 
 model Product {
-  id           String   @id @default(uuid()) 
-  title        String   @db.VarChar(255)
-  description  String   
-  status       String   
-  ownerId      Int     
-  owner        User     @relation(fields: [ownerId], references: [id]) 
-  sellingPrice Float    
-  rentPrice    Float    
-  rentRule     String   
-  boughtById   Int?     
-  boughtBy     User?    @relation(fields: [boughtById], references: [id]) 
-  sellingDate  DateTime? 
-  borrowedById Int?     
-  borrowedBy   User?    @relation(fields: [borrowedById], references: [id]) 
-  rentDate     DateTime? 
-  createdAt    DateTime @default(now())
+  id            String   @id @default(uuid()) 
+  title         String   @db.VarChar(255)
+  description   String   
+  status        String   
+  category      String
+  ownerId       Int     
+  owner         User     @relation(name: "UserOwnsProducts", fields: [ownerId], references: [id]) 
+  purchasePrice Float    
+  rentPrice     Float    
+  rentPeriod    String   
+  boughtById    Int?     
+  boughtBy      User?    @relation(name: "UserBuysProducts", fields: [boughtById], references: [id]) 
+  purchaseDate  DateTime? 
+  borrowedById  Int?     
+  borrowedBy    User?    @relation(name: "UserBorrowsProducts", fields: [borrowedById], references: [id]) 
+  rentDate      DateTime? 
+  createdAt     DateTime @default(now())
 }
+

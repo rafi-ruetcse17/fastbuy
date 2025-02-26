@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "borrowed" INTEGER[] DEFAULT ARRAY[]::INTEGER[],
+ADD COLUMN     "owned" INTEGER[] DEFAULT ARRAY[]::INTEGER[];
