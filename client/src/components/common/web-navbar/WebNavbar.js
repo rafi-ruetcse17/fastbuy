@@ -20,9 +20,7 @@ const WebNavbar = () => {
       <div></div>
       <div className={styles["nav-right"]}>
         {!arePathsEqual(pathname, appRouteList.history) && (
-          <Button className={styles["history"]} onClick={handleLogout}>
-            My History
-          </Button>
+          <Button className={styles["history"]}>My History</Button>
         )}
         <Button className={styles["logout-button"]} onClick={handleLogout}>
           LOGOUT

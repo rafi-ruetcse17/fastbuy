@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client";
 import client from "@/lib/gql/apolloClient";
 import productStatus from "@/lib/enums/productStatus";
 import { ADD_PRODUCT } from "@/lib/gql/mutations";
+import { GET_USER_PRODUCTS } from "@/lib/gql/mutations";
 
 const Summary = () => {
   const router = useRouter();
@@ -36,6 +37,7 @@ const Summary = () => {
     try {
       await submitProduct({
         variables: { ...productData, status: productStatus.AVAILABLE },
+        refetchQueries: [{ query: GET_USER_PRODUCTS }],
       });
       sessionStorage.removeItem("product");
       alert("Product submitted successfully!");
