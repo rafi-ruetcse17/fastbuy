@@ -1,6 +1,6 @@
 # FastBuy
 
-FastBuy is a web application where users can sign up and log in with their email addresses and passwords. The platform allows users to add products for sale or rent at user-specified rates. Rental rates can be hourly, monthly, or daily. Additionally, users can view all their own products on the user top page after being authenticated.
+FastBuy is a web application where users can sign up and log in with their email addresses and passwords. The platform allows users to add products for sale or rent at user-specified rates. Rental rates can be hourly, monthly, or daily. Additionally, users can view all their own products on the user top page after being authenticated. Users can delete their own products also.
 
 ## Upcoming Features
 - Users can buy a product
