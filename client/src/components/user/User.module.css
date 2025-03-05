@@ -29,6 +29,6 @@
   border-radius: 5px !important;
   font-weight: 600 !important;
   transition: background 0.3s ease-in-out;
-  width: 200px;
+  width: 200px !important;
   align-self: flex-end;
 }

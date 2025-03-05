@@ -5,6 +5,7 @@ const typeDefs = `
     email: String!
     token: String!
   }
+
   type Product {
     id: String!
     title: String!
@@ -20,6 +21,11 @@ const typeDefs = `
     borrowedBy: User
     rentDate: String
     createdAt: String!
+  }
+
+  type Response {
+    statusCode: Int
+    message: String
   }
 
   type Query {
@@ -39,6 +45,7 @@ const typeDefs = `
       rentPrice: Float!
       rentPeriod: String!
     ): Product
+    deleteProduct(productId: String!): Response
   }
 `;
 

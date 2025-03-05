@@ -73,6 +73,30 @@ const resolvers = {
         throw new Error(error.message);
       }
     },
+
+    deleteProduct: async (_, { productId }, { user }) => {
+      if (!user) {
+        return { statusCode: 401, message: "Not authenticated" };
+      }
+      try {
+        const product = await prisma.product.findUnique({
+          where: { id: productId },
+        });
+
+        if (!product) {
+          return { statusCode: 404, message: "Product not found" };
+        }
+        if (product.ownerId != user.id) {
+          return { statusCode: 403, message: "Unauthorized" };
+        }
+
+        await prisma.product.delete({ where: { id: productId } });
+
+        return { statusCode: 200, message: "Product deleted successfully" };
+      } catch (error) {
+        return { statusCode: 500, message: error.message };
+      }
+    },
   },
 };
 

@@ -45,3 +45,12 @@ export const GET_USER_PRODUCTS = gql`
     }
   }
 `;
+
+export const DELETE_PRODUCT = gql`
+  mutation RemoveProduct($productId: String!) {
+    deleteProduct(productId: $productId) {
+      statusCode
+      message
+    }
+  }
+`;
